@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "functions": {
-    "api/ai-sommelier.js": {
-      "runtime": "edge"
+  "builds": [
+    {
+      "src": "api/ai-sommelier.js",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/api/ai-sommelier",
       "dest": "api/ai-sommelier.js"
     }
-  ],
-  "test": "deployment check"
+  ]
 }

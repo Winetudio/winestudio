@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "functions": {
+    "api/ai-sommelier.js": {
+      "runtime": "edge"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/ai-sommelier",
+      "dest": "api/ai-sommelier.js"
+    }
+  ]
+}

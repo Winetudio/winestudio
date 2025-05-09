@@ -10,5 +10,6 @@
       "src": "/api/ai-sommelier",
       "dest": "api/ai-sommelier.js"
     }
-  ]
+  ],
+  "test": "deployment check"
 }

@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/ai-sommelier.js",
-      "use": "@vercel/node"
-    }
-  ],
   "routes": [
     {
       "src": "/api/ai-sommelier",
       "methods": ["POST"],
       "dest": "api/ai-sommelier.js"
+    }
+  ],
+  "builds": [
+    {
+      "src": "api/ai-sommelier.js",
+      "use": "@vercel/node"
     }
   ]
 }

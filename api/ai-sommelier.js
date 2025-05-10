@@ -1,29 +1,40 @@
-import OpenAI from "openai";
+const { OpenAI } = require("openai");
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY
 });
 
-export default async function handler(req, res) {
-  const { message } = req.body;
-
-  if (!message || message.length > 300) {
-    return res.status(400).json({ error: "Ungültige Eingabe" });
+module.exports = async (req, res) => {
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Nur POST erlaubt" });
   }
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [
-      {
-        role: "system",
-        content:
-          "Du bist ein virtueller Sommelier für den Onlineshop WineStudio. Du empfiehlst passende Weine aus dem Sortiment zu Speisen und beantwortest nur Fragen zum Thema Wein und Genuss. Andere Fragen ignorierst du freundlich.",
-      },
-      { role: "user", content: message },
-    ],
-    temperature: 0.7,
-  });
+  const { question } = req.body;
 
-  const reply = completion.choices[0]?.message?.content || "Keine Empfehlung gefunden.";
-  res.status(200).json({ reply });
-}
+  if (!question) {
+    return res.status(400).json({ message: "Frage fehlt" });
+  }
+
+  try {
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "Du bist ein Sommelier in einem Online-Weinshop. Antworte klar, freundlich und mit konkreten Empfehlungen aus dem Shop-Sortiment. Antworte auf Deutsch."
+        },
+        {
+          role: "user",
+          content: question
+        }
+      ],
+      temperature: 0.7
+    });
+
+    const response = chatCompletion.choices[0].message.content;
+    return res.status(200).json({ answer: response });
+  } catch (error) {
+    console.error("Fehler bei OpenAI:", error);
+    return res.status(500).json({ message: "Fehler bei der KI-Antwort." });
+  }
+};
